@@ -10,7 +10,8 @@
 #include "SIMD.h"
 #include "../typedefs.h"
 
-const double fPi25DT = 3.141592653589793238462643;
+
+//const double fPi25DT = 3.141592653589793238462643;
 
 __attribute__((always_inline)) double f(double a);
 

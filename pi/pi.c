@@ -13,7 +13,7 @@ int parallel_pi_generic(int thread_count, int n){
     omp_set_num_threads(thread_count);
     int num_threads=thread_count;
     const double fH   = 1.0 / (double) n;
-#pragma omp parallel shared(n, fSum) default(none)
+    #pragma omp parallel shared(n, fSum) default(none)
     {
         const double fH   = 1.0 / (double) n;
         double TotalSum = 0.0;
@@ -22,7 +22,7 @@ int parallel_pi_generic(int thread_count, int n){
 
         int tid = omp_get_thread_num();
         fSum[tid][0] = 0.0;
-#pragma omp for schedule(static, n/20)
+    #pragma omp for schedule(static, n/20)
         for (int i = 0; i < n; i += 1)
         {
             fX = fH * ((double)i + 0.5);
