@@ -20,6 +20,9 @@ add_executable(OpenMP_exercises
         utils/utils.h
         MPI/MatrixVector/matrix_vector_mpi.c
         MPI/MatrixVector/matrix_vector_mpi.h
+        MPI/ping_pong/pingPong-a.h
+        MPI/ping_pong/pingPong-a.c
+        MPI/ping_pong/pingPong-b.c
 
 )
 
@@ -31,7 +34,10 @@ target_link_libraries(OpenMP_exercises PRIVATE
         m
 )
 
-target_compile_options(OpenMP_exercises PRIVATE
-       -O2 -mavx2  -mfma -march=native
-)
+#target_compile_options(OpenMP_exercises PRIVATE
+#        -mavx2  -mfma -march=native
+#)
 
+target_compile_options(OpenMP_exercises PRIVATE
+         -O2 -mavx2 -mfma
+)

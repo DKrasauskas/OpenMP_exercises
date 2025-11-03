@@ -8,7 +8,8 @@
 #include <omp.h>
 #include <immintrin.h>
 #include <fmaintrin.h>
-
+#define MVX_ARCH
+#ifdef MVX_ARCH
 #define SIMD_MULT(A, B) _mm256_mul_pd(A, B)
 #define SIMD_FMA(A, B, C) _mm256_fmadd_pd(A, B, C)
 #define SIMD_FDIV(A, B) _mm256_div_pd(A, B)
@@ -31,4 +32,5 @@
 #define default_float8 _mm256_setzero_ps()
 #define float8_SET(X) _mm256_set1_ps(X)
 #define make_float8(A, B, C, D, E, F, G, H) _mm256_set_ps(A, B, C, D, E, F, G, H)
+#endif
 #endif //PARALLELIZED_SIMD_H

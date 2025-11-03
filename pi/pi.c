@@ -2,6 +2,8 @@
 // Created by domin on 20/10/2025.
 //
 #include "pi.h"
+#define MVX_ARCH
+const double fPi25DT = 3.141592653589793238462643;
 
 __attribute__((always_inline)) double f(double a)
 {
@@ -59,6 +61,27 @@ inline tuple generic_pi(int n){
     return output;
 }
 
+inline tuple naiive_pi(int n){
+
+    const double fH   = 1.0 / (double) n;
+    double TotalSum = 0.0;
+    double fSum;
+    double fX;
+    int i, j;
+
+    fSum=0.0;
+    for (i = 0; i < n; i += 1)
+    {
+        fX = fH * ((double)i + 0.5);
+        fSum = fSum+ f(fX);
+    }
+
+    double pi = fH * TotalSum;
+    tuple output;
+    output.value = fSum * fH;
+    return output;
+}
+#ifdef MVX_ARCH
 inline tuple sequential_pi(int n){
 
         const double fH   = 1.0 / (double) n;
@@ -139,6 +162,29 @@ inline tuple parallel_pi(int thread_count, int n){
     }
     tuple output;
     output.value = sum * fH;
+    return output;
+}
+#endif
+inline tuple reduction_parallel_pi(int thread_count, int n){
+    int num_threads = thread_count;
+    omp_set_num_threads(num_threads);
+    const double fH   = 1.0 / (double) n;
+    double TotalSum = 0.0;
+    double fSum = 0.0f;
+    double fX;
+    int i, j;
+
+    fSum=0.0;
+    #pragma omp parallel for reduction(+: fSum)
+    for (i = 0; i < n; i += 1)
+    {
+        fX = fH * ((double)i + 0.5);
+        fSum = fSum+ f(fX);
+    }
+
+    double pi = fH * TotalSum;
+    tuple output;
+    output.value = fSum * fH;
     return output;
 }
 
