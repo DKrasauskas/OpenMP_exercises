@@ -41,7 +41,7 @@ void correct_parallelization(int size, float* matrix, float* b, float* c){
             }
         }
 }
-
+#ifdef MVX_ARCH
 void fast_parallelization(int size, float* matrix, float* b, float* c){
     int threads = omp_get_max_threads();
     int split = size / threads;
@@ -78,7 +78,7 @@ void fast_parallelization(int size, float* matrix, float* b, float* c){
         }
     }
 }
-
+#endif
 int dot () {
     int size = SIZE;
     int i, j;
@@ -127,7 +127,7 @@ int dot () {
 //        }
 //        printf("max err = %f \n", max);
     }
-
+    #ifdef MVX_ARCH
     printf("runtime fast algorithm:\n");
     fTimeStart = omp_get_wtime();
     for(int t = 1; t < k; t ++){
@@ -140,7 +140,7 @@ int dot () {
     }
 
     fTimeEnd = omp_get_wtime();
-
+    #endif
     printf("\n");
     printf("  wall clock time     = %.20f\n", fTimeEnd - fTimeStart);
     free(matrix);
