@@ -24,7 +24,7 @@ int parallel_pi_generic(int thread_count, int n){
 
         int tid = omp_get_thread_num();
         fSum[tid][0] = 0.0;
-    #pragma omp for schedule(static, n/20)
+        #pragma omp for
         for (int i = 0; i < n; i += 1)
         {
             fX = fH * ((double)i + 0.5);

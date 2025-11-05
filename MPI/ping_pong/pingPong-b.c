@@ -19,6 +19,7 @@ void ping_pong_b(int argc, char **argv)
     int numberOfElementsToSend = random() % 100;
     // Allocate an array big enough to hold event the largest message
     int *myArray = (int *)malloc(sizeof(int)*MAX_ARRAY_SIZE);
+    int array[256];
     if (myArray == NULL)
     {
         printf("Not enough memory\n");
@@ -31,7 +32,7 @@ void ping_pong_b(int argc, char **argv)
     {
         printf("Sending %i elements\n", numberOfElementsToSend);
         // TODO: Send "numberOfElementsToSend" elements
-        MPI_Send(myArray, numberOfElementsToSend, MPI_INT, 1, 0, MPI_COMM_WORLD);
+        MPI_Send(array, numberOfElementsToSend, MPI_INT, 1, 0, MPI_COMM_WORLD);
         // TODO: Receive elements
         MPI_Recv(myArray, MAX_ARRAY_SIZE, MPI_INT, 1, 0, MPI_COMM_WORLD, &status);
         // TODO: Store number of elements received in numberOfElementsReceived
