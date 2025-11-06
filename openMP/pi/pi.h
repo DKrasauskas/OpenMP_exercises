@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "SIMD.h"
-#include "../typedefs.h"
+#include "../../typedefs.h"
 
 
 extern const double fPi25DT;

@@ -21,15 +21,16 @@ void fixit()
     //have the master thread do the initialization BEFORE private assign
     for (j = 0; j < N; j++) a[0][j] = j;
     /* Fork a team of threads */
+    #define __syncthreads() _Pragma("omp barrier")
     #pragma omp parallel shared(nrthreads) private(i, a, tid, j, b)
     {
-
         /* Obtain/print thread info */
         /// tid needs to be private
         tid = omp_get_thread_num();
         if (tid == 0) {
             nrthreads = omp_get_num_threads();
             printf("Number of threads = %d\n", nrthreads);
+            for (j = 0; j < N; j++) a[0][j] = j;
         }
         __syncthreads();
         for (j = 0; j < N; j++) a[0][j] = j;

@@ -5,7 +5,7 @@
 // Maximum array size 2^20= 1048576 elements
 #define MAX_ARRAY_SIZE (1<<20)
 
-int main(int argc, char **argv)
+void generate_ab(int argc, char **argv)
 {
     // Variables for the process rank and number of processes
     int myRank, numProcs, i;
@@ -38,46 +38,44 @@ int main(int argc, char **argv)
     }
 
     // TODO: Use a loop to vary the message size
-    if (myRank == 0)
-    {
-        printf("Rank %2.1i: Sending %i elements\n",
-            myRank, numberOfElementsToSend);
+    for(int p = 1; p < (1 << 20); p *= 2) {
+        numberOfElementsToSend = p;
+        numberOfElementsReceived = p;
+        if (myRank == 0) {
+//            printf("Rank %2.1i: Sending %i elements\n",
+//                   myRank, numberOfElementsToSend);
 
-        myArray[0]=myArray[1]+1; // activate in cache (avoids possible delay when sending the 1st element)
+            myArray[0] = myArray[1] + 1; // activate in cache (avoids possible delay when sending the 1st element)
 
-        // TODO: Measure the time spent in MPI communication
-        //       (use the variables startTime and endTime)
-        startTime = ...;
-        for (i=0; i<5; i++) 
-        {
-            MPI_Send(myArray, numberOfElementsToSend, MPI_INT, 1, 0,
-                 MPI_COMM_WORLD);
-            // Probe message in order to obtain the amount of data
+            // TODO: Measure the time spent in MPI communication
+            //       (use the variables startTime and endTime)
+            double startTime = MPI_Wtime();
+            for (i = 0; i < 5; i++) {
+                MPI_Send(myArray, numberOfElementsToSend, MPI_INT, 1, 0,
+                         MPI_COMM_WORLD);
+                // Probe message in order to obtain the amount of data
 /*        MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
         MPI_Get_count(&status, MPI_INT, &numberOfElementsReceived);
 */
-            MPI_Recv(myArray, numberOfElementsReceived, MPI_INT, 1, 0,
-                MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        } // end of for-loop
+                MPI_Recv(myArray, numberOfElementsReceived, MPI_INT, 1, 0,
+                         MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            } // end of for-loop
 
-        endTime = ...;
+            double endTime = MPI_Wtime();
 
-        printf("Rank %2.1i: Received %i elements\n",
-            myRank, numberOfElementsReceived);
+//            printf("Rank %2.1i: Received %i elements\n",
+//                   myRank, numberOfElementsReceived);
 
-        // average communication time of 1 send-receive (total 5*2 times)
-        printf("Ping Pong took %f seconds\n", (endTime - startTime)/10);
-    }
-    else if (myRank == 1)
-    {
-        // Probe message in order to obtain the amount of data
- /*       MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-        MPI_Get_count(&status, MPI_INT, &numberOfElementsReceived);
-*/
-        for (i=0; i<5; i++)
-        {
-            MPI_Recv(myArray, numberOfElementsReceived, MPI_INT, 0, 0,
-               MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            // average communication time of 1 send-receive (total 5*2 times)
+            printf("%.20f \n", (endTime - startTime) / 10);
+        } else if (myRank == 1) {
+            // Probe message in order to obtain the amount of data
+            /*       MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+                   MPI_Get_count(&status, MPI_INT, &numberOfElementsReceived);
+           */
+            for (i = 0; i < 5; i++) {
+                MPI_Recv(myArray, numberOfElementsReceived, MPI_INT, 0, 0,
+                         MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 /*        printf("Rank %2.1i: Received %i elements\n",
             myRank, numberOfElementsReceived);
@@ -86,13 +84,13 @@ int main(int argc, char **argv)
             myRank, numberOfElementsToSend);
 */
 
-            MPI_Send(myArray, numberOfElementsToSend, MPI_INT, 0, 0,
-               MPI_COMM_WORLD);
-        } // end of for-loop
+                MPI_Send(myArray, numberOfElementsToSend, MPI_INT, 0, 0,
+                         MPI_COMM_WORLD);
+            } // end of for-loop
+        }
     }
 
     // Finalize MPI
     MPI_Finalize();
 
-    return 0;
 }

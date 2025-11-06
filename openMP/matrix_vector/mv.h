@@ -8,7 +8,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <omp.h>
-#define SIZE 1000
+#define SIZE 10000
 
 //
 // Created by dominykas on 11/2/25.
@@ -21,8 +21,8 @@
 *   stores the result in vector c.
 ******************************************************************************/
 #include "mv.h"
-#include "../pi/SIMD.h"
-void wrong_parallelization(int i, int j, int size, float* matrix, float* b, float* c);
+#include "../../openMP/pi/SIMD.h"
+void wrong_parallelization(int size, float* matrix, float* b, float* c);
 
 void correct_parallelization(int size, float* matrix, float* b, float* c);
 

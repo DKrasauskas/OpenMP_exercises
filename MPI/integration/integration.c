@@ -150,7 +150,7 @@ int integration_dispatch(int argc, char **argv)
     double stopTime = MPI_Wtime();
 
     if (myRank == 0)
-        printf("\nIntegral value = %lf\nComputation took %.3lf seconds\n",
+        printf("\nIntegral value = %lf\nComputation took %.7lf seconds\n",
                Intgr_val, stopTime-startTime);
 
     MPI_Finalize();

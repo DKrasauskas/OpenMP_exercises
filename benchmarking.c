@@ -2,7 +2,7 @@
 // Created by domin on 30/10/2025.
 //
 #include "benchmarking.h"
-#include "pi/pi.h"
+#include "openMP/pi/pi.h"
 
 void benchmark(tuple (*func)(int),  int n){
     double begin = omp_get_wtime();

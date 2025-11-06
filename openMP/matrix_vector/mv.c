@@ -10,7 +10,7 @@
 ******************************************************************************/
 #include <string.h>
 #include "mv.h"
-#include "../pi/SIMD.h"
+#include "../../openMP/pi/SIMD.h"
 
 void init(int i, int j, int size, float* matrix, float* b, float* c){
     for (i = 0; i < size; i++) {
@@ -22,7 +22,9 @@ void init(int i, int j, int size, float* matrix, float* b, float* c){
         c[i] = 0.0;
     }
 }
-void wrong_parallelization(int i, int j, int size, float* matrix, float* b, float* c){
+void wrong_parallelization(int size, float* matrix, float* b, float* c){
+    int i, j;
+    omp_set_num_threads(2);
     #pragma omp parallel for private(i)
     for (i = 0; i < SIZE; i++){
         for (j = 0; j < SIZE; j++) {
@@ -71,7 +73,7 @@ void fast_parallelization(int size, float* matrix, float* b, float* c){
             for(int p = 0; p < 8; p ++) sum += temp[p];
             //now compute from the end
             for(int k = j; k < size; k ++){
-                int index = j + i * size;
+                int index = k + i * size;
                 sum += matrix[index] * b[k];
             }
             c[i] = sum;

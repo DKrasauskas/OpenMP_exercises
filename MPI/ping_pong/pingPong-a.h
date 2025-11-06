@@ -12,6 +12,7 @@ void ping_pong_a(int argc, char **argv);
 void ping_pong_b(int argc, char **argv);
 void ping_pong_c(int argc, char **argv);
 void ping_pong_d(int argc, char **argv);
+void generate_ab(int argc, char **argv);
 #define MAX_ARRAY_SIZE (1<<10)
 
 
